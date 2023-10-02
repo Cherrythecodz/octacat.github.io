@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Order - CMS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('path_to_your_image/CMS.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 40px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .order-details {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .order-details p {
+            text-align: left;
+            margin: 8px 0;
+        }
+
+        .payment-button {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .payment-button button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .payment-button button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Create New Order</h1>
+
+        <form id="orderForm">
+            <label for="senderName">Sender Name:</label>
+            <input type="text" id="senderName" required><br><br>
+
+            <label for="senderAddress">Sender Address:</label>
+            <input type="text" id="senderAddress" required><br><br>
+
+            <label for="receiverName">Receiver Name:</label>
+            <input type="text" id="receiverName" required><br><br>
+
+            <label for="receiverAddress">Receiver Address:</label>
+            <input type="text" id="receiverAddress" required><br><br>
+
+            <label for="packageName">Package Name:</label>
+            <input type="text" id="packageName" required><br><br>
+
+            <label for="packageWeight">Package Weight (kg):</label>
+            <input type="number" id="packageWeight" min="0.1" step="0.1" required><br><br>
+            <label for="payOnDelivery">Pay on Delivery:</label>
+            <input type="checkbox" id="payOnDelivery"><br><br>
+
+            <a href="trackOrder.html">Track Order</a><br><br>
+            <input type="submit" value="Calculate Price">
+        </form>
+
+        <div id="orderDetails" style="display:none;">
+            <h2>Order Details:</h2>
+            <p id="distance"></p>
+            <p id="weightCharge"></p>
+            <p id="totalPrice"></p>
+        </div>
+
+        <button id="paymentButton" style="display:none;">Proceed to Payment</button>
+    </div>
+
+    <script>
+        document.getElementById('orderForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            let senderName = document.getElementById('senderName').value;
+            let senderAddress = document.getElementById('senderAddress').value;
+            let receiverName = document.getElementById('receiverName').value;
+            let receiverAddress = document.getElementById('receiverAddress').value;
+            let packageName = document.getElementById('packageName').value;
+            let packageWeight = parseFloat(document.getElementById('packageWeight').value);
+
+            let distance = 100;
+            let distanceCharge = distance * 0.1;
+            let weightCharge = packageWeight * 5;
+            let totalPrice = distanceCharge + weightCharge;
+
+            document.getElementById('distance').textContent = `Distance Charge: ₹${distanceCharge.toFixed(2)}`;
+            document.getElementById('weightCharge').textContent = `Weight Charge: ₹${weightCharge.toFixed(2)}`;
+            document.getElementById('totalPrice').textContent = `Total Price: ₹${totalPrice.toFixed(2)}`;
+
+            document.getElementById('orderDetails').style.display = 'block';
+
+            let payOnDelivery = document.getElementById('payOnDelivery').checked;
+            if (payOnDelivery) {
+                document.getElementById('paymentButton').textContent = 'Pay on Delivery';
+                document.getElementById('paymentButton').style.display = 'block';
+            } else {
+                document.getElementById('paymentButton').textContent = 'Proceed to Payment';
+                document.getElementById('paymentButton').style.display = 'block';
+            }
+        });
+
+        document.getElementById('paymentButton').addEventListener('click', function () {
+            if (this.textContent === 'Pay on Delivery') {
+                alert('Order placed! You can pay when the package is delivered.');
+            } else {
+                window.location.href = 'paymentGatewayUrl'; // Replace with actual URL
+            }
+        });
+    </script>
+</body>
+
+</html>

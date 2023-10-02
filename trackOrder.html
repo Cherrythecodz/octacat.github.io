@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Order - CMS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('path_to_your_image/CMS.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 20px;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .map-container {
+            height: 400px;
+            width: 100%;
+        }
+
+        #latlng {
+            padding: 8px;
+            margin-right: 10px;
+            width: 200px;
+        }
+
+        #submit {
+            padding: 8px 16px;
+        }
+
+        .info-window-content {
+            max-width: 300px;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Track Your Order</h1>
+        <div>
+            <label for="latlng">Enter Latitude,Longitude:</label>
+            <input type="text" id="latlng" placeholder="e.g. 40.7128,-74.0060">
+            <button id="submit">Submit</button>
+        </div>
+        <div class="map-container" id="map"></div>
+    </div>
+
+    <script>
+        function initMap() {
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 8,
+                center: { lat: 40.731, lng: -73.997 },
+            });
+
+            const geocoder = new google.maps.Geocoder();
+            const infowindow = new google.maps.InfoWindow();
+
+            document.getElementById("submit").addEventListener("click", () => {
+                geocodeLatLng(geocoder, map, infowindow);
+            });
+        }
+
+        function geocodeLatLng(geocoder, map, infowindow) {
+            const input = document.getElementById("latlng").value;
+            const latlngStr = input.split(",", 2);
+            const latlng = {
+                lat: parseFloat(latlngStr[0]),
+                lng: parseFloat(latlngStr[1]),
+            };
+
+            geocoder
+                .geocode({ location: latlng })
+                .then((response) => {
+                    if (response.results[0]) {
+                        map.setZoom(11);
+
+                        const marker = new google.maps.Marker({
+                            position: latlng,
+                            map: map,
+                        });
+
+                        infowindow.setContent(
+                            '<div class="info-window-content">' +
+                            "<h3>Delivery Address</h3>" +
+                            "<p>" + response.results[0].formatted_address + "</p>" +
+                            "</div>"
+                        );
+                        infowindow.open(map, marker);
+                    } else {
+                        window.alert("No results found");
+                    }
+                })
+                .catch((e) => window.alert("Geocoder failed due to: " + e));
+        }
+
+        window.initMap = initMap;
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+</body>
+
+</html>

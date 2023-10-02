@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courier Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('Cms.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            text-align: center;
+            margin: 0;
+            position: relative;
+            height: 100vh; /* Make body take full viewport height */
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 100px auto;
+            background-color: transparent;
+            padding: 20px;
+            border-radius: 8px;
+            color: #333;
+            position: relative;
+            min-height: 60vh; /* Adjusted minimum height */
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .menu-toggle {
+            cursor: pointer;
+            font-size: 30px;
+            position: absolute;
+            top: -100px;
+            left: -300px;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: flex;
+        }
+
+        .menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        .menu li {
+            margin: 0 10px;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .menu a:hover {
+            color: #4caf50;
+        }
+
+        .menu ul {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            background-color: beige;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px 0;
+            text-align: left;
+            z-index: 1;
+            width: 150px;
+        }
+
+        .menu ul li {
+            margin: 0;
+            padding: 8px 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .menu ul li:hover {
+            background-color: #ddd;
+        }
+
+        .menu ul.active {
+            display: flex;
+            position: flex;
+            width: auto;
+        }
+
+        .menu ul.active li {
+            width: 100%;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: green;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Welcome to the CMS</h2>
+        <p>Is your beloved one waiting for your gift?</p>
+        <p>Streamline and optimize the processes involved in managing courier and package deliveries.</p>
+        <p>Enhance efficiency, accuracy, and overall customer experience for both the courier service provider and its clients.</p>
+        <button onclick="window.location.href='createOrder.html'">Create Order</button>
+        <div class="menu-toggle">
+            &#9776;
+        </div>
+        <div class="menu">
+            <ul>
+                <li><a href="AdminDashboard.html">Admin Dashboard</a></li>
+                <li><a href="TrackOrder.html">Track Order</a></li>
+                <li><a href="Report.html">Report</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        messaging.requestPermission()
+  .then(() => {
+    console.log('Notification permission granted.');
+    return messaging.getToken();
+  })
+  .then((token) => {
+    console.log('Token:', token);
+  })
+  .catch((err) => {
+    console.log('Unable to get permission to notify.', err);
+  });
+     
+  messaging.onMessage((payload) => {
+    console.log('Message received:', payload);
+    // Handle the message and display the notification
+  });
+  
+  const title = payload.notification.title;
+const options = {
+  body: payload.notification.body,
+  icon: payload.notification.icon,
+};
+
+self.registration.showNotification(title, options);
+
+const accountSid = 'your_account_sid';
+const authToken = 'your_auth_token';
+const client = require('twilio')(accountSid, authToken);
+
+client.messages
+  .create({
+     body: 'This is the message body',
+     from: '+1234567890', // Your Twilio phone number
+     to: '+0987654321'   // Recipient's phone number
+   })
+  .then(message => console.log(message.sid));
+
+  const nodemailer = require('nodemailer');
+
+let transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'charanchepala42@gmail.com',
+    pass: 'yourpassword'
+  }
+});
+
+let mailOptions = {
+  from: 'charanchepala42@gmail.com',
+  to: 'recipient@example.com',
+  subject: 'Subject of the email',
+  text: 'This is the body of the email'
+};
+
+transporter.sendMail(mailOptions, (error, info) => {
+  if (error) {
+    return console.log(error);
+  }
+  console.log('Email sent: ' + info.response);
+});
+
+
+        const menuToggle = document.querySelector('.menu-toggle');
+        const menu = document.querySelector('.menu ul');
+
+        menuToggle.addEventListener('click', () => {
+            menu.classList.toggle('active');
+        });
+    </script>
+</body>
+
+</html>
